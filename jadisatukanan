@@ -1,0 +1,16 @@
+#!/bin/sh
+# buat halaman kosong
+echo ""|ps2pdf -sPAPERSIZE=a4 - kosong.pdf
+
+#fileku="243-734-1-PB.pdf"
+for fileku in *.pdf;do
+	banyak_halaman=`pdftk "$fileku" dump_data|grep "NumberOfPages"|cut -d" " -f2`
+	echo $banyak_halaman
+	if [ $(( $banyak_halaman%2 )) == 1 ];then
+		pdftk "$fileku" kosong.pdf output "terurut$fileku"
+	else
+		cp "$fileku" "terurut$fileku"
+	fi
+done
+
+pdftk terurut*.pdf output gabungkanan.pdf
